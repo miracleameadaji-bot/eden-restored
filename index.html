@@ -21,25 +21,27 @@
         h2, h3 { font-family: 'Cormorant Garamond', serif; margin-top: 0; margin-bottom: 10px; }
         
         .check-item { display: flex; align-items: center; margin: 10px 0; }
-        .check-item input { width: 20px; height: 20px; margin-right: 10px; accent-color: var(--sage); }
+        .check-item input { width: 22px; height: 22px; margin-right: 12px; accent-color: var(--sage); }
 
         input, textarea, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; font-family: inherit; }
         textarea { min-height: 80px; }
         
         .btn { background: var(--sage); color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; font-weight: 600; margin-top: 5px; font-size: 15px; }
-        
+        .btn-red { background: #ff4444; margin-top: 10px; }
+
         .entry { background: #fffde7; padding: 12px; border-radius: 10px; margin-top: 10px; position: relative; border: 1px solid #eee; }
         .delete { color: #ff4444; cursor: pointer; font-weight: bold; float: right; font-size: 18px; }
 
         .tracker-row { display: flex; justify-content: space-between; align-items: center; margin: 10px 0; background: #f9f9f9; padding: 10px; border-radius: 8px; }
         .counter-btn { background: var(--sage); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; cursor: pointer; }
 
-        nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; overflow-x: auto; border-top: 2px solid var(--sage); z-index: 1000; }
-        .nav-item { flex: 0 0 20%; text-align: center; padding: 10px 0; font-size: 9px; color: #888; cursor: pointer; }
+        nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; border-top: 2px solid var(--sage); z-index: 1000; }
+        .nav-item { flex: 1; text-align: center; padding: 10px 0; font-size: 9px; color: #888; cursor: pointer; min-width: 60px; }
         .nav-item.active { color: var(--sage); font-weight: bold; }
-        .nav-icon { display: block; font-size: 1.5rem; }
+        .nav-icon { display: block; font-size: 1.4rem; }
         
-        .img-preview { max-width: 100%; border-radius: 10px; margin-top: 10px; display: block; }
+        .img-preview { max-width: 100%; border-radius: 10px; margin: 10px 0; display: block; }
+        .answered { text-decoration: line-through; color: #888; opacity: 0.7; }
     </style>
 </head>
 <body>
@@ -60,7 +62,7 @@
         </div>
         <div class="card">
             <h3>Chef Log</h3>
-            <textarea id="daily-cook" placeholder="What was on the menu today?"></textarea>
+            <textarea id="daily-cook" placeholder="What did you cook today?"></textarea>
             <button class="btn" onclick="addNote('daily-log', 'daily-cook')">Save Log</button>
             <div id="daily-log"></div>
         </div>
@@ -74,42 +76,34 @@
             <button class="btn" onclick="addCourse()">Add Course Folder</button>
             <div id="course-container"></div>
         </div>
+        <div class="card">
+            <h3>Books for Fun</h3>
+            <input type="text" id="fun-title" placeholder="Book Title">
+            <input type="text" id="fun-author" placeholder="Author">
+            <textarea id="fun-review" placeholder="What I liked/hated..."></textarea>
+            <select id="fun-stars">
+                <option value="⭐⭐⭐⭐⭐">5 Stars</option>
+                <option value="⭐⭐⭐⭐">4 Stars</option>
+                <option value="⭐⭐⭐">3 Stars</option>
+            </select>
+            <button class="btn" onclick="addBookReview()">Save Review</button>
+            <div id="book-reviews"></div>
+        </div>
     </div>
 
     <div id="agility" class="section">
         <h2>Agility & Bloom</h2>
         <div class="card">
             <h3>Weekly Exercise Plan</h3>
-            <textarea id="workout-plan" placeholder="Mon: Yoga, Tue: Walk..."></textarea>
+            <textarea id="workout-plan" placeholder="Enter your plan for the week..."></textarea>
             <button class="btn" onclick="addNote('workout-list', 'workout-plan')">Update Plan</button>
             <div id="workout-list"></div>
         </div>
         <div class="card">
             <h3>Vitality Trackers</h3>
-            <div class="tracker-row">
-                <span>💧 Water (Glasses)</span>
-                <div>
-                    <button class="counter-btn" onclick="count('water', -1)">-</button>
-                    <span id="water-val">0</span>
-                    <button class="counter-btn" onclick="count('water', 1)">+</button>
-                </div>
-            </div>
-            <div class="tracker-row">
-                <span>🍽️ Meals Taken</span>
-                <div>
-                    <button class="counter-btn" onclick="count('meals', -1)">-</button>
-                    <span id="meals-val">0</span>
-                    <button class="counter-btn" onclick="count('meals', 1)">+</button>
-                </div>
-            </div>
-            <div class="tracker-row">
-                <span>🥤 Soft Drinks (Month)</span>
-                <div>
-                    <button class="counter-btn" onclick="count('soda', -1)">-</button>
-                    <span id="soda-val">0</span>
-                    <button class="counter-btn" onclick="count('soda', 1)">+</button>
-                </div>
-            </div>
+            <div class="tracker-row"><span>💧 Water (Glasses)</span><div><button class="counter-btn" onclick="count('water', -1)">-</button><span id="water-val">0</span><button class="counter-btn" onclick="count('water', 1)">+</button></div></div>
+            <div class="tracker-row"><span>🍽️ Meals Taken</span><div><button class="counter-btn" onclick="count('meals', -1)">-</button><span id="meals-val">0</span><button class="counter-btn" onclick="count('meals', 1)">+</button></div></div>
+            <div class="tracker-row"><span>🥤 Soft Drinks (Month)</span><div><button class="counter-btn" onclick="count('soda', -1)">-</button><span id="soda-val">0</span><button class="counter-btn" onclick="count('soda', 1)">+</button></div></div>
             <button class="btn" style="background:#888" onclick="resetCounters()">Reset Daily (Water/Meals)</button>
         </div>
     </div>
@@ -119,8 +113,9 @@
         <div class="card">
             <h3>New Book Project</h3>
             <input type="text" id="ink-title" placeholder="Book Title">
+            <label style="font-size: 12px;">Add Inspiration Image:</label>
             <input type="file" id="ink-img" accept="image/*">
-            <button class="btn" onclick="addProject()">Start Writing</button>
+            <button class="btn" onclick="addProject()">Create Master Folder</button>
         </div>
         <div id="ink-container"></div>
     </div>
@@ -128,13 +123,9 @@
     <div id="chapel" class="section">
         <h2>The Chapel</h2>
         <div class="card">
-            <h3>Bible Streak</h3>
-            <button class="btn" onclick="alert('Streak updated!')">Read John Today 🔥</button>
-        </div>
-        <div class="card">
-            <h3>Prayer Altar</h3>
-            <textarea id="prayer-input" placeholder="What's on your heart today?"></textarea>
-            <button class="btn" onclick="addNote('prayer-list', 'prayer-input')">Record Prayer</button>
+            <h3>Prayer Points</h3>
+            <textarea id="prayer-input" placeholder="Enter a request..."></textarea>
+            <button class="btn" onclick="addPrayer()">Send Up Prayer</button>
             <div id="prayer-list"></div>
         </div>
     </div>
@@ -151,7 +142,7 @@
 
 <nav>
     <div class="nav-item active" onclick="tab('daily', this)"><span class="nav-icon">🌿</span>Daily</div>
-    <div class="nav-item" onclick="tab('library', this)"><span class="nav-icon">📚</span>Study</div>
+    <div class="nav-item" onclick="tab('library', this)"><span class="nav-icon">📚</span>Library</div>
     <div class="nav-item" onclick="tab('agility', this)"><span class="nav-icon">🏃‍♀️</span>Agility</div>
     <div class="nav-item" onclick="tab('inkwell', this)"><span class="nav-icon">✍️</span>Inkwell</div>
     <div class="nav-item" onclick="tab('chapel', this)"><span class="nav-icon">⛪</span>Chapel</div>
@@ -167,6 +158,12 @@
         save();
     }
 
+    function save() { localStorage.setItem('eden_v6', document.body.innerHTML); }
+    window.onload = function() {
+        const data = localStorage.getItem('eden_v6');
+        if(data) { document.body.innerHTML = data; }
+    };
+
     function addNote(containerId, inputId) {
         const val = document.getElementById(inputId).value;
         if(!val) return;
@@ -175,6 +172,49 @@
         div.innerHTML = `<span class="delete" onclick="this.parentElement.remove(); save();">✕</span>${val}`;
         document.getElementById(containerId).prepend(div);
         document.getElementById(inputId).value = "";
+        save();
+    }
+
+    function addBookReview() {
+        const title = document.getElementById('fun-title').value;
+        const auth = document.getElementById('fun-author').value;
+        const rev = document.getElementById('fun-review').value;
+        const stars = document.getElementById('fun-stars').value;
+        if(!title) return;
+        const div = document.createElement('div');
+        div.className = "entry";
+        div.innerHTML = `<span class="delete" onclick="this.parentElement.remove(); save();">✕</span><b>${title}</b> by ${auth}<br>Rating: ${stars}<br><i>${rev}</i>`;
+        document.getElementById('book-reviews').prepend(div);
+        document.getElementById('fun-title').value = "";
+        document.getElementById('fun-author').value = "";
+        document.getElementById('fun-review').value = "";
+        save();
+    }
+
+    function addProject() {
+        const title = document.getElementById('ink-title').value;
+        const file = document.getElementById('ink-img').files[0];
+        if(!title) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const div = document.createElement('div');
+            div.className = "card";
+            div.innerHTML = `<h3>Book: ${title}</h3><img src="${e.target.result}" class="img-preview" style="${e.target.result ? '' : 'display:none'}"><h4>Plots</h4><textarea placeholder="Write plot here..."></textarea><h4>Characters</h4><textarea placeholder="Character arcs..."></textarea><button class="btn btn-red" onclick="this.parentElement.remove(); save();">Delete Project</button>`;
+            document.getElementById('ink-container').prepend(div);
+            save();
+        };
+        if(file) reader.readAsDataURL(file);
+        else reader.onload({target:{result:''}});
+    }
+
+    function addPrayer() {
+        const val = document.getElementById('prayer-input').value;
+        if(!val) return;
+        const div = document.createElement('div');
+        div.className = "check-item";
+        div.innerHTML = `<input type="checkbox" onchange="this.parentElement.classList.toggle('answered'); save();"> <span>${val}</span>`;
+        document.getElementById('prayer-list').prepend(div);
+        document.getElementById('prayer-input').value = "";
         save();
     }
 
@@ -192,38 +232,17 @@
         save();
     }
 
-    function addProject() {
-        const title = document.getElementById('ink-title').value;
-        const file = document.getElementById('ink-img').files[0];
-        if(!title) return;
-        
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const div = document.createElement('div');
-            div.className = "card";
-            div.innerHTML = `<h3>${title}</h3><img src="${e.target.result}" class="img-preview"><textarea placeholder="Plot details..."></textarea><button class="btn" style="background:red" onclick="this.parentElement.remove(); save();">Delete Project</button>`;
-            document.getElementById('ink-container').prepend(div);
-            save();
-        };
-        if(file) reader.readAsDataURL(file);
-        else reader.onload({target:{result:''}});
-    }
-
     function addCourse() {
         const name = document.getElementById('course-name').value;
+        if(!name) return;
         const div = document.createElement('div');
         div.className = "card";
-        div.innerHTML = `<h3>${name}</h3><textarea placeholder="Study notes..."></textarea><button class="btn" style="background:red" onclick="this.parentElement.remove(); save();">Delete</button>`;
+        div.innerHTML = `<h3>${name}</h3><textarea placeholder="Notes..."></textarea><button class="btn btn-red" onclick="this.parentElement.remove(); save();">Delete</button>`;
         document.getElementById('course-container').prepend(div);
+        document.getElementById('course-name').value = "";
         save();
     }
-
-    function save() { localStorage.setItem('eden_v5', document.body.innerHTML); }
-    window.onload = function() {
-        const data = localStorage.getItem('eden_v5');
-        if(data) { document.body.innerHTML = data; }
-    };
 </script>
 </body>
-                                                             </html>
-                                                             
+    </html>
+    
