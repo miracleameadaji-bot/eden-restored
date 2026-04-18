@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eden Restored | Pro</title>
+    <title>Eden Restored</title>
+    <link rel="manifest" href="data:application/manifest+json,{'name':'Eden Restored','short_name':'Eden','start_url':'.','display':'standalone','background_color':'#f5f5dc','theme_color':'#b2ac88'}">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Montserrat:wght@300;400;600&display=swap');
         :root { --sage: #b2ac88; --cream: #f5f5dc; --espresso: #3e2723; --white: #ffffff; }
@@ -20,27 +21,22 @@
         h2, h3 { font-family: 'Cormorant Garamond', serif; margin-top: 0; }
         
         input, textarea, select { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        .btn { background: var(--sage); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: 600; margin-top: 5px; }
+        .btn { background: var(--sage); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: 600; margin-top: 5px; font-size: 16px; }
         
         .entry { background: var(--cream); padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.9rem; position: relative; }
-        .stars { color: #d4af37; font-size: 1.2rem; }
-        .delete { color: red; cursor: pointer; font-weight: bold; float: right; }
+        .delete { color: red; cursor: pointer; font-weight: bold; float: right; padding: 5px; font-size: 18px; }
 
-        /* Navigation */
         nav { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; overflow-x: auto; border-top: 2px solid var(--sage); z-index: 1000; }
         .nav-item { flex: 0 0 75px; text-align: center; padding: 12px 0; font-size: 9px; color: #aaa; cursor: pointer; }
         .nav-item.active { color: var(--sage); font-weight: bold; }
         .nav-icon { display: block; font-size: 1.4rem; }
-        
-        /* Grid for Inkwell/Greenhouse */
-        .sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>🌿 Eden Restored 🌿</h1>
-    <div id="streak-counter" style="font-size: 12px; font-weight: bold;">John 1:1 Streak: 🔥 <span id="streak-val">0</span> days</div>
+    <div id="streak-counter" style="font-size: 12px; font-weight: bold;">John 1 Streak: 🔥 <span id="streak-val">0</span> days</div>
 </header>
 
 <main id="app-body">
@@ -61,27 +57,16 @@
         </div>
     </div>
 
-    <div id="agility" class="section">
-        <h2>Agility Grove</h2>
-        <div class="card">
-            <h3>Exercise Routine</h3>
-            <input type="text" id="ex-name" placeholder="Exercise (e.g., Hip Flexors)">
-            <input type="text" id="ex-sets" placeholder="Sets/Reps">
-            <button class="btn" onclick="addExercise()">Add Exercise</button>
-            <div id="exercise-list"></div>
-        </div>
-    </div>
-
     <div id="library" class="section">
         <h2>The Library</h2>
         <div class="card">
-            <h3>Pre-Med School Tracker</h3>
-            <input type="text" id="course-name" placeholder="Course Name (e.g. Anatomy)">
+            <h3>Pre-Med School</h3>
+            <input type="text" id="course-name" placeholder="Course Name">
             <button class="btn" onclick="addCourse()">Add New Course</button>
             <div id="course-container"></div>
         </div>
         <div class="card">
-            <h3>Reading for Fun</h3>
+            <h3>Books for Fun</h3>
             <input type="text" id="fun-title" placeholder="Book Title">
             <input type="text" id="fun-author" placeholder="Author">
             <textarea id="fun-review" placeholder="Love? Hate? General Review..."></textarea>
@@ -93,7 +78,7 @@
 
     <div id="inkwell" class="section">
         <h2>The Inkwell</h2>
-        <input type="text" id="book-project-name" placeholder="Book Title (e.g. Novel A)">
+        <input type="text" id="book-project-name" placeholder="New Book Title">
         <button class="btn" onclick="addBookProject()">Create Book Folder</button>
         <div id="inkwell-container"></div>
     </div>
@@ -101,15 +86,9 @@
     <div id="chapel" class="section">
         <h2>The Chapel</h2>
         <div class="card">
-            <h3>Daily Verse: John</h3>
-            <p>Today's Verse Goal: <span id="verse-goal">John 1:1</span></p>
-            <button class="btn" onclick="updateStreak()">I Read Today's Verse 🔥</button>
-        </div>
-        <div class="card">
-            <h3>Prayer Points</h3>
-            <textarea id="prayer-pt" placeholder="Type prayer point..."></textarea>
-            <button class="btn" onclick="addNote('prayer-list', 'prayer-pt')">Add Prayer</button>
-            <div id="prayer-list"></div>
+            <h3>Bible Streak</h3>
+            <p>One Verse from John Daily</p>
+            <button class="btn" onclick="updateStreak()">I Read Today 🔥</button>
         </div>
     </div>
 
@@ -117,19 +96,18 @@
         <h2>Mirror Pond</h2>
         <div class="card">
             <h3>Skincare Routine</h3>
-            <label><input type="checkbox"> AM Cleanse</label><br>
-            <label><input type="checkbox"> SPF</label><br>
-            <label><input type="checkbox"> PM Cleanse</label>
+            <label><input type="checkbox"> Cleanse</label><br>
+            <label><input type="checkbox"> SPF / Moisturize</label>
         </div>
     </div>
 
     <div id="greenhouse" class="section">
         <h2>The Greenhouse</h2>
         <div class="card">
-            <h3>Gap Year Faves</h3>
+            <h3>Gap Year Highlights</h3>
             <input type="text" id="fav-movie" placeholder="Favorite Movie">
             <input type="text" id="fav-book" placeholder="Favorite Book">
-            <button class="btn" onclick="addFave()">Save Faves</button>
+            <button class="btn" onclick="addNote('fave-list', 'fav-movie')">Save Highlights</button>
             <div id="fave-list"></div>
         </div>
     </div>
@@ -137,7 +115,6 @@
 
 <nav>
     <div class="nav-item active" onclick="tab('daily', this)"><span class="nav-icon">🌿</span>Daily</div>
-    <div class="nav-item" onclick="tab('agility', this)"><span class="nav-icon">🏃‍♀️</span>Agility</div>
     <div class="nav-item" onclick="tab('library', this)"><span class="nav-icon">📚</span>Library</div>
     <div class="nav-item" onclick="tab('inkwell', this)"><span class="nav-icon">✍️</span>Inkwell</div>
     <div class="nav-item" onclick="tab('chapel', this)"><span class="nav-icon">⛪</span>Chapel</div>
@@ -146,6 +123,7 @@
 </nav>
 
 <script>
+    // --- APP LOGIC ---
     function tab(id, el) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -153,8 +131,6 @@
         el.classList.add('active');
         save();
     }
-
-    // --- FUNCTIONALITY ---
 
     function addNote(containerId, inputId) {
         const val = document.getElementById(inputId).value;
@@ -167,24 +143,13 @@
         save();
     }
 
-    function addExercise() {
-        const name = document.getElementById('ex-name').value;
-        const sets = document.getElementById('ex-sets').value;
-        const div = document.createElement('div');
-        div.className = "entry";
-        div.innerHTML = `<b>${name}</b>: ${sets} <span class="delete" onclick="this.parentElement.remove(); save();">✕</span>`;
-        document.getElementById('exercise-list').prepend(div);
-        save();
-    }
-
     function addBookReview() {
         const title = document.getElementById('fun-title').value;
         const author = document.getElementById('fun-author').value;
-        const review = document.getElementById('fun-review').value;
         const stars = document.getElementById('fun-stars').value;
         const div = document.createElement('div');
         div.className = "entry";
-        div.innerHTML = `<b>${title}</b> by ${author}<br>${stars}<br><i>${review}</i> <span class="delete" onclick="this.parentElement.remove(); save();">✕</span>`;
+        div.innerHTML = `<b>${title}</b> - ${author} (${stars})<span class="delete" onclick="this.parentElement.remove(); save();">✕</span>`;
         document.getElementById('book-reviews').prepend(div);
         save();
     }
@@ -193,7 +158,7 @@
         const name = document.getElementById('course-name').value;
         const div = document.createElement('div');
         div.className = "card";
-        div.innerHTML = `<h3>${name}</h3><textarea placeholder="Notes..."></textarea><input type="file" accept="image/*" onchange="previewImg(this)"><div class="img-prev"></div><textarea placeholder="Revision Notes..."></textarea><button onclick="this.parentElement.remove(); save();">Delete Course</button>`;
+        div.innerHTML = `<h3>${name}</h3><textarea placeholder="Notes..."></textarea><textarea placeholder="Revision..."></textarea><button class="btn" style="background:red" onclick="this.parentElement.remove(); save();">Delete</button>`;
         document.getElementById('course-container').prepend(div);
         save();
     }
@@ -202,25 +167,9 @@
         const name = document.getElementById('book-project-name').value;
         const div = document.createElement('div');
         div.className = "card";
-        div.innerHTML = `<h3>Book: ${name}</h3><textarea placeholder="Plots..."></textarea><textarea placeholder="Characters..."></textarea><input type="file" accept="image/*" onchange="previewImg(this)"><div class="img-prev"></div><button onclick="this.parentElement.remove(); save();">Delete Project</button>`;
+        div.innerHTML = `<h3>Book: ${name}</h3><textarea placeholder="Plots..."></textarea><textarea placeholder="Characters..."></textarea><button class="btn" style="background:red" onclick="this.parentElement.remove(); save();">Delete</button>`;
         document.getElementById('inkwell-container').prepend(div);
         save();
-    }
-
-    function previewImg(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.style.width = "100%";
-                img.style.marginTop = "10px";
-                input.nextElementSibling.innerHTML = "";
-                input.nextElementSibling.appendChild(img);
-                save();
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
     }
 
     function updateStreak() {
@@ -229,37 +178,29 @@
         save();
     }
 
-    // --- STORAGE ---
-    function save() { localStorage.setItem('eden_v3', document.body.innerHTML); }
+    function save() { localStorage.setItem('eden_v4', document.body.innerHTML); }
     window.onload = function() {
-        const data = localStorage.getItem('eden_v3');
+        const data = localStorage.getItem('eden_v4');
         if(data) { document.body.innerHTML = data; }
+    };
+
+    // --- THE OFFLINE MAGIC (Service Worker) ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            const swCode = `
+                const cacheName = 'eden-cache-v1';
+                self.addEventListener('install', e => {
+                    e.waitUntil(caches.open(cacheName).then(cache => cache.addAll(['./', './index.html'])));
+                });
+                self.addEventListener('fetch', e => {
+                    e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+                });
+            `;
+            const blob = new Blob([swCode], {type: 'text/javascript'});
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl);
+        });
     }
 </script>
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<div class="card">
-    <h3>Data Security</h3>
-    <p>Copy your data to keep a backup in your email/notes.</p>
-    <button class="btn" onclick="exportData()">Export All My Data</button>
-</div>
-
-<script>
-    // Add this function to your <script> area
-    function exportData() {
-        const data = localStorage.getItem('eden_v3');
-        const blob = new Blob([data], {type: 'text/plain'});
-        const anchor = document.createElement('a');
-        anchor.download = "eden_backup.txt";
-        anchor.href = window.URL.createObjectURL(blob);
-        anchor.click();
-        alert("Data exported! Keep this file safe.");
-    }
-
-    // Make delete buttons bigger for phone thumbs
-    // (Added to CSS) .del-btn { padding: 10px; font-size: 18px; }
-</script>
-<link rel="manifest" href="data:application/manifest+json,{'name':'Eden Restored','short_name':'Eden','start_url':'.','display':'standalone','background_color':'#f5f5dc','theme_color':'#b2ac88'}">
 </body>
 </html>
